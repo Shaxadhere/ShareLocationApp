@@ -22,20 +22,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.requestLocation()
     }
 
-    private func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+         print("error:: \(error.localizedDescription)")
+    }
+
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse {
             locationManager.requestLocation()
         }
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+
         if locations.first != nil {
             print("location:: (location)")
         }
-    }
 
-    private func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        print("error:: (error)")
     }
 
 }
