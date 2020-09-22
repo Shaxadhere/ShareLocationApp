@@ -8,8 +8,16 @@
 
 import UIKit
 import CoreLocation
+import MapKit
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
+    
+    
+    @IBOutlet weak var mapKitView: MKMapView!
+    
+    var longitude: Double = 0.00
+    var latitude: Double = 0.00
+   
     
     let locationManager = CLLocationManager()
 
@@ -20,8 +28,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
+        
+        print(longitude)
     }
-
+    
+    
+    @IBAction func btnShareLocation(_ sender: Any) {
+        print(longitude)
+    }
+    
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
          print("error:: \(error.localizedDescription)")
     }
@@ -34,10 +50,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 
-        if locations.first != nil {
-            print("location:: (location)")
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+            
         }
 
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (timer) in
+            if let location = locations.first{
+                guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+                
+                self.longitude = locValue.longitude
+                self.latitude = locValue.latitude
+                
+                let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+                let region = MKCoordinateRegion(center: location.coordinate, span: span)
+                self.mapKitView.setRegion(region, animated: true)
+                
+//                print(self.longitude)
+            }
+        }
+        
     }
 
 }
